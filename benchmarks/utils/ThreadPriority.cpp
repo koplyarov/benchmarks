@@ -8,8 +8,8 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-#include <benchmarks/core/utils/Logger.hpp>
-#include <benchmarks/core/utils/ThreadPriority.hpp>
+#include <benchmarks/utils/Logger.hpp>
+#include <benchmarks/utils/ThreadPriority.hpp>
 
 #include <iostream>
 

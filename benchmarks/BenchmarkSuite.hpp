@@ -11,9 +11,9 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-#include <benchmarks/core/Benchmark.hpp>
-#include <benchmarks/core/detail/ParameterizedBenchmarkId.hpp>
-#include <benchmarks/core/utils/Logger.hpp>
+#include <benchmarks/Benchmark.hpp>
+#include <benchmarks/detail/ParameterizedBenchmarkId.hpp>
+#include <benchmarks/utils/Logger.hpp>
 
 #include <map>
 #include <stdexcept>

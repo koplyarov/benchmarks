@@ -11,7 +11,7 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-#include <benchmarks/core/ipc/Messages.hpp>
+#include <benchmarks/ipc/Messages.hpp>
 
 #include <boost/interprocess/ipc/message_queue.hpp>
 

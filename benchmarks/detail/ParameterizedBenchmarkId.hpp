@@ -11,8 +11,8 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-#include <benchmarks/core/Benchmark.hpp>
-#include <benchmarks/core/detail/BenchmarkId.hpp>
+#include <benchmarks/Benchmark.hpp>
+#include <benchmarks/detail/BenchmarkId.hpp>
 
 
 namespace benchmarks

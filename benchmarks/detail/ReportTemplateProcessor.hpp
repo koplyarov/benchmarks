@@ -11,8 +11,8 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-#include <benchmarks/core/detail/MeasurementId.hpp>
-#include <benchmarks/core/detail/ParameterPair.hpp>
+#include <benchmarks/detail/MeasurementId.hpp>
+#include <benchmarks/detail/ParameterPair.hpp>
 
 #include <boost/phoenix/phoenix.hpp>
 #include <boost/spirit/include/qi.hpp>

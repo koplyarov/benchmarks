@@ -7,16 +7,34 @@
 // IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+#include <benchmarks/detail/BenchmarkResult.hpp>
 
-#include <benchmarks/core/utils/Barrier.hpp>
+#include <algorithm>
 
 
-namespace benchmarks {
-namespace detail
+namespace benchmarks
 {
 
-#if !defined(__GNUC__) && !defined(_MSC_VER)
-	void Barrier() { }
-#endif
+	namespace
+	{
+		template < typename MapType_ >
+		void MergeMaps(MapType_& dst, const MapType_& src)
+		{
+			for (auto p : src)
+			{
+				auto it = dst.find(p.first);
+				if (it == dst.end())
+					dst.insert({p.first, p.second});
+				else
+					it->second = std::min(it->second, p.second);
+			}
+		}
+	}
 
-}}
+	void BenchmarkResult::Update(const BenchmarkResult& other)
+	{
+		MergeMaps(_operationTimes, other._operationTimes);
+		MergeMaps(_memoryConsumption, other._memoryConsumption);
+	}
+
+}

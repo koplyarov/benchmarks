@@ -8,11 +8,11 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-#include <benchmarks/core/BenchmarkApp.hpp>
+#include <benchmarks/BenchmarkApp.hpp>
 
-#include <benchmarks/core/detail/ReportTemplateProcessor.hpp>
-#include <benchmarks/core/ipc/MessageQueue.hpp>
-#include <benchmarks/core/utils/ThreadPriority.hpp>
+#include <benchmarks/detail/ReportTemplateProcessor.hpp>
+#include <benchmarks/ipc/MessageQueue.hpp>
+#include <benchmarks/utils/ThreadPriority.hpp>
 
 #include <boost/program_options.hpp>
 #include <boost/regex.hpp>

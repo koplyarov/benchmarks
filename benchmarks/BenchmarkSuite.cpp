@@ -8,15 +8,15 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-#include <benchmarks/core/BenchmarkSuite.hpp>
+#include <benchmarks/BenchmarkSuite.hpp>
 
 #include <algorithm>
 #include <iostream>
 #include <thread>
 
-#include <benchmarks/core/utils/Barrier.hpp>
-#include <benchmarks/core/utils/Memory.hpp>
-#include <benchmarks/core/utils/Profiler.hpp>
+#include <benchmarks/utils/Barrier.hpp>
+#include <benchmarks/utils/Memory.hpp>
+#include <benchmarks/utils/Profiler.hpp>
 
 
 namespace benchmarks
