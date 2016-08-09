@@ -239,7 +239,7 @@ namespace benchmarks
 
 							std::ios::fmtflags f(output_stream->flags());
 							BOOST_SCOPE_EXIT_ALL(&) { output_stream->flags(f); };
-							if (val < 100)
+							if (val < 99)
 								*output_stream << std::setprecision(2);
 							else
 								*output_stream << std::fixed << std::setprecision(0);
