@@ -125,15 +125,15 @@ namespace benchmarks
 				boost::regex benchmark_re(R"(([^.]+)\.([^.]+)\.([^.]+))");
 				boost::smatch m;
 				if (!boost::regex_match(benchmark, m, benchmark_re))
-					throw CmdLineException("Could not parse benchmark id!");
+					throw CmdLineException("Could not parse benchmark id: '" + benchmark + "'!");
 
-				boost::regex param_re(R"(([^.]+):([^.]+))");
+				boost::regex param_re(R"(([^:]+):(.+))");
 				std::map<std::string, SerializedParam> params;
 				for (auto&& param_str : params_vec)
 				{
 					boost::smatch m;
 					if (!boost::regex_match(param_str, m, param_re))
-						throw CmdLineException("Could not parse parameter!");
+						throw CmdLineException("Could not parse parameter: '" + param_str + "'!");
 					params[m[1]] = m[2];
 				}
 
