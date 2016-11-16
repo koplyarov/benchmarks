@@ -48,6 +48,14 @@ namespace benchmarks
 			IOperationProfilerPtr op(Profile(name, count));
 			func();
 		}
+
+		template < typename FunctorType_ >
+		void WarmUpAndProfile(const std::string& name, int64_t count, const FunctorType_& func)
+		{
+			func();
+			IOperationProfilerPtr op(Profile(name, count));
+			func();
+		}
 	};
 
 }
