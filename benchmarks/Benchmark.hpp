@@ -50,10 +50,10 @@ namespace benchmarks
 		struct BenchmarkInvoker<BenchmarkParamsHead_, BenchmarkParamsTail_...>
 		{
 			template < typename ParamNamesIter_, typename SerializedParamsMap_, typename Functor_, typename... ParamTypes_ >
-			static void Invoke(ParamNamesIter_ paramNamesBegin, ParamNamesIter_ paramNamesEnd, const SerializedParamsMap_& serializedParams, const Functor_& f, ParamTypes_&&... params)
+			static void Invoke(const std::string& name, ParamNamesIter_ paramNamesBegin, ParamNamesIter_ paramNamesEnd, const SerializedParamsMap_& serializedParams, const Functor_& f, ParamTypes_&&... params)
 			{
 				if (paramNamesBegin == paramNamesEnd)
-					throw std::runtime_error("Parameters count mismatch!");
+					throw std::runtime_error(name + ": parameters count mismatch!");
 
 				auto param_name = *paramNamesBegin;
 				auto it = serializedParams.find(param_name);
@@ -62,7 +62,7 @@ namespace benchmarks
 
 				BenchmarkParamsHead_ p = BenchmarkParamDeserializer<BenchmarkParamsHead_>::Deserialize(it->second);
 
-				BenchmarkInvoker<BenchmarkParamsTail_...>::Invoke(std::next(paramNamesBegin), paramNamesEnd, serializedParams, f, std::forward<ParamTypes_>(params)..., p);
+				BenchmarkInvoker<BenchmarkParamsTail_...>::Invoke(name, std::next(paramNamesBegin), paramNamesEnd, serializedParams, f, std::forward<ParamTypes_>(params)..., p);
 			}
 		};
 
@@ -70,10 +70,10 @@ namespace benchmarks
 		struct BenchmarkInvoker<>
 		{
 			template < typename ParamNamesIter_, typename Functor_, typename SerializedParamsMap_, typename... ParamTypes_ >
-			static void Invoke(ParamNamesIter_ paramNamesBegin, ParamNamesIter_ paramNamesEnd, const SerializedParamsMap_& serializedParams, const Functor_& f, ParamTypes_&&... params)
+			static void Invoke(const std::string& name, ParamNamesIter_ paramNamesBegin, ParamNamesIter_ paramNamesEnd, const SerializedParamsMap_& serializedParams, const Functor_& f, ParamTypes_&&... params)
 			{
 				if (paramNamesBegin != paramNamesEnd)
-					throw std::runtime_error("Parameters count mismatch!");
+					throw std::runtime_error(name + ": parameters count mismatch!");
 
 				f(std::forward<ParamTypes_>(params)...);
 			}
@@ -106,7 +106,7 @@ namespace benchmarks
 			: _name(std::move(name)), _benchmarkFunc(std::move(benchmarkFunc)), _orderedParamNames(std::move(orderedParamNames))
 		{
 			if (_orderedParamNames.size() != sizeof...(BenchmarkParams_))
-				throw std::runtime_error("Parameters count mismatch: expected " + std::to_string(sizeof...(BenchmarkParams_)) + ", got " + std::to_string(_orderedParamNames.size()));
+				throw std::runtime_error(_name + ": parameters count mismatch: expected " + std::to_string(sizeof...(BenchmarkParams_)) + ", got " + std::to_string(_orderedParamNames.size()));
 		}
 
 		std::string GetName() const
@@ -115,9 +115,9 @@ namespace benchmarks
 		void Perform(BenchmarkContext& context, const SerializedParamsMap& serializedParams) const
 		{
 			if (serializedParams.size() != _orderedParamNames.size())
-				throw std::runtime_error("Parameters count mismatch!");
+				throw std::runtime_error(_name + ": parameters count mismatch!");
 
-			detail::BenchmarkInvoker<BenchmarkParams_...>::Invoke(_orderedParamNames.cbegin(), _orderedParamNames.cend(), serializedParams, _benchmarkFunc, context);
+			detail::BenchmarkInvoker<BenchmarkParams_...>::Invoke(_name, _orderedParamNames.cbegin(), _orderedParamNames.cend(), serializedParams, _benchmarkFunc, context);
 		}
 	};
 
