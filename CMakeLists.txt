@@ -26,6 +26,8 @@ if (Boost_FOUND)
 	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 	include_directories(${Boost_INCLUDE_DIRS})
 
+	add_definitions(-DBOOST_SPIRIT_USE_PHOENIX_V3=1)
+
 	add_library(benchmarks
 		benchmarks/BenchmarkApp.cpp
 		benchmarks/BenchmarkSuite.cpp
