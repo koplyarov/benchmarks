@@ -35,7 +35,7 @@ namespace benchmarks
 		scheduler_params.sched_priority = sched_get_priority_max(policy);
 		int res = pthread_setschedparam(pthread_self(), policy, &scheduler_params);
 		if (res != 0)
-			g_logger.Info() << "Could not set thread priority: " << strerror(res);
+			g_logger.Debug() << "Could not set thread priority: " << strerror(res);
 #endif
 #if _WIN32
 		if (!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL))
@@ -43,7 +43,7 @@ namespace benchmarks
 			DWORD err = GetLastError();
 			char buf[256] = { '\0' };
 			FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), buf, sizeof(buf) - 1, NULL);
-			g_logger.Info() << "Could not set thread priority: " << buf;
+			g_logger.Debug() << "Could not set thread priority: " << buf;
 		}
 #endif
 	}
