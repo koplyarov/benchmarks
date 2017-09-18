@@ -27,7 +27,7 @@ namespace benchmarks
 		MeasurementId() { }
 
 		MeasurementId(ParameterizedBenchmarkId benchmarkId, std::string measurementLocalId)
-			: _benchmarkId(benchmarkId), _measurementLocalId(measurementLocalId)
+			: _benchmarkId(std::move(benchmarkId)), _measurementLocalId(std::move(measurementLocalId))
 		{ }
 
 		ParameterizedBenchmarkId GetBenchmarkId() const { return _benchmarkId; }

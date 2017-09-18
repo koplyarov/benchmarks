@@ -183,7 +183,7 @@ namespace benchmarks
 							make_default_multi_pass(std::istreambuf_iterator<char>(input_stream)),
 							make_default_multi_pass(std::istreambuf_iterator<char>()),
 							[&](char c) { },
-							[&](const MeasurementId& id, boost::optional<MeasurementId> baselineId)
+							[&](const MeasurementId& id, const boost::optional<MeasurementId>& baselineId)
 							{
 								requested_benchmarks.insert({id.GetBenchmarkId(), {}});
 								if (baselineId)
@@ -231,7 +231,7 @@ namespace benchmarks
 						make_default_multi_pass(std::istreambuf_iterator<char>(input_stream)),
 						make_default_multi_pass(std::istreambuf_iterator<char>()),
 						[&](char c) { *output_stream << c; },
-						[&](const MeasurementId& id, boost::optional<MeasurementId> baselineId)
+						[&](const MeasurementId& id, const boost::optional<MeasurementId>& baselineId)
 						{
 							auto val = get_measurement(id);
 							if (baselineId)
