@@ -167,6 +167,9 @@ namespace benchmarks
 			auto next_min_duration = min_duration * multiplier;
 			auto next_max_rss = max_rss * multiplier;
 
+			if (num_iterations * nanoseconds(1) > seconds(20))
+				throw std::runtime_error("Iteration time too small. Your benchmarks is probably wrong or optimized away.");
+
 			if (max_duration > seconds(10))
 			{
 				s_logger.Warning() << "Max time limit exceeded!";
