@@ -301,7 +301,14 @@ namespace benchmarks
 			max_rss = std::max(max_rss, r_msg->GetRss());
 		}
 
-		s_logger.Verbose() << iterations << " iterations: " << max_rss / (1024 * 1024) << "MB max rss";
+		{
+			auto lw = s_logger.Verbose();
+			lw << iterations << " iterations, " << max_rss / (1024 * 1024) << "MB max rss";
+			for (const auto& kv : r.GetOperationTimes())
+				lw << ", " << kv.first << ": " << kv.second;
+			for (const auto& kv : r.GetMemoryConsumption())
+				lw << ", " << kv.first << ": " << kv.second;
+		}
 
 		return r;
 	}
