@@ -116,7 +116,8 @@ namespace benchmarks
 			case 0: Logger::SetLogLevel(LogLevel::Error); break;
 			case 1: Logger::SetLogLevel(LogLevel::Warning); break;
 			case 2: Logger::SetLogLevel(LogLevel::Info); break;
-			case 3: Logger::SetLogLevel(LogLevel::Debug); break;
+			case 3: Logger::SetLogLevel(LogLevel::Verbose); break;
+			case 4: Logger::SetLogLevel(LogLevel::Debug); break;
 			default: s_logger.Warning() << "Unexpected verbosity value: " << _verbosity; break;
 			}
 

@@ -22,6 +22,7 @@ namespace benchmarks
 	enum class LogLevel
 	{
 		Debug,
+		Verbose,
 		Info,
 		Warning,
 		Error
@@ -93,6 +94,7 @@ namespace benchmarks
 		{ }
 
 		LoggerWriter Debug() const { return LoggerWriter(LogLevel::Debug, _name); }
+		LoggerWriter Verbose() const { return LoggerWriter(LogLevel::Verbose, _name); }
 		LoggerWriter Info() const { return LoggerWriter(LogLevel::Info, _name); }
 		LoggerWriter Warning() const { return LoggerWriter(LogLevel::Warning, _name); }
 		LoggerWriter Error() const { return LoggerWriter(LogLevel::Error, _name); }

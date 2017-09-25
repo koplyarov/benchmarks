@@ -56,13 +56,14 @@ namespace benchmarks
 		std::lock_guard<std::mutex> l(s_mutex);
 		switch (logLevel)
 		{
-		case LogLevel::Debug:	std::cerr << "[Debug] "; break;
-		case LogLevel::Info:	std::cerr << "[Info] "; break;
+		case LogLevel::Debug:	std::cerr << "[Debug]   "; break;
+		case LogLevel::Verbose:	std::cerr << "[Verbose] "; break;
+		case LogLevel::Info:	std::cerr << "[Info]    "; break;
 		case LogLevel::Warning:	std::cerr << "[Warning] "; break;
-		case LogLevel::Error:	std::cerr << "[Error] "; break;
+		case LogLevel::Error:	std::cerr << "[Error]   "; break;
 		default: std::cerr << "[LogLevel: " << static_cast<std::underlying_type<LogLevel>::type>(logLevel) << "] "; break;
 		}
-		std::cerr << "[" << loggerName << "] " << str << std::endl;
+		std::cerr << "[" << loggerName << "] " << std::string(std::max(0, 16 - (int)loggerName.size()), ' ') << str << std::endl;
 	}
 
 }
