@@ -8,10 +8,13 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
+
+
 #include <benchmarks/BenchmarkApp.hpp>
 
 #include <benchmarks/detail/ReportTemplateProcessor.hpp>
 #include <benchmarks/ipc/MessageQueue.hpp>
+#include <benchmarks/utils/Memory.hpp>
 #include <benchmarks/utils/ThreadPriority.hpp>
 
 #include <boost/program_options.hpp>
@@ -157,7 +160,7 @@ namespace benchmarks
 					auto result = BenchmarkResult(results_reporter->GetOperationTimes(), results_reporter->GetMemoryConsumption());
 
 					MessageQueue mq(_queueName, boost::interprocess::open_only);
-					mq.SendMessage(std::make_shared<BenchmarkResultMessage>(result));
+					mq.SendMessage(std::make_shared<BenchmarkResultMessage>(result, Memory::GetRss()));
 					return 0;
 				}
 				else if (!subtask.empty())
@@ -281,18 +284,24 @@ namespace benchmarks
 		}
 
 		auto it_msg = mq.ReceiveMessage<IterationsCountMessage>();
+		uint64_t iterations = it_msg->GetCount();
+
 		BenchmarkResult r;
+		uint64_t max_rss = 0;
 		for (int64_t i = 0; i < _repeatCount; ++i)
 		{
 			std::stringstream cmd;
-			cmd << _executableName << " --subtask invokeBenchmark --queue " << _queueName << " --verbosity " << _verbosity << " --iterations " << it_msg->GetCount() << " " << benchmark;
+			cmd << _executableName << " --subtask invokeBenchmark --queue " << _queueName << " --verbosity " << _verbosity << " --iterations " << iterations << " " << benchmark;
 			for (auto&& p : id.GetParams())
 				cmd << " " << p.first << ":" << p.second;
 
 			InvokeSubprocess(cmd.str());
 			auto r_msg = mq.ReceiveMessage<BenchmarkResultMessage>();
 			r.Update(r_msg->GetResult());
+			max_rss = std::max(max_rss, r_msg->GetRss());
 		}
+
+		s_logger.Verbose() << iterations << " iterations: " << max_rss / (1024 * 1024) << "MB max rss";
 
 		return r;
 	}

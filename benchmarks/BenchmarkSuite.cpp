@@ -162,7 +162,7 @@ namespace benchmarks
 			auto max_duration = minmax_element.second == dm.end() ? nanoseconds() : minmax_element.second->second;
 			auto max_rss = ctx.GetMaxRss();
 
-			s_logger.Debug() << "num_iterations: " << num_iterations << ", min_duration: " << min_duration.count() << " ns, max_duration: " << max_duration.count() << " ns, max_rss: " << max_rss;
+			s_logger.Debug() << "num_iterations: " << num_iterations << ", min_duration: " << min_duration.count() << " ns, max_duration: " << max_duration.count() << " ns, max_rss: " << max_rss << ", Memory::GetRss(): " << Memory::GetRss() / (1024 * 1024) << "MB";
 
 			auto next_min_duration = min_duration * multiplier;
 			auto next_max_rss = max_rss * multiplier;

@@ -59,20 +59,22 @@ namespace benchmarks
 	{
 	private:
 		BenchmarkResult		_result;
+		uint64_t			_rss;
 
 	public:
 		BenchmarkResultMessage()
 		{ }
 
-		BenchmarkResultMessage(BenchmarkResult result)
-			: _result(std::move(result))
+		BenchmarkResultMessage(BenchmarkResult result, uint64_t rss)
+			: _result(std::move(result)), _rss(rss)
 		{ }
 
 		const BenchmarkResult& GetResult() const { return _result; }
+		uint64_t GetRss() const { return _rss; }
 
 		template<class Archive>
 		void serialize(Archive &ar, const unsigned int version)
-		{ ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(benchmarks::MessageBase) & BOOST_SERIALIZATION_NVP(_result); }
+		{ ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(benchmarks::MessageBase) & BOOST_SERIALIZATION_NVP(_result) & BOOST_SERIALIZATION_NVP(_rss); }
 	};
 
 
