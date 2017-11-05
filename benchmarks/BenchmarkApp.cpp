@@ -82,6 +82,7 @@ namespace benchmarks
 			_executableName = argv[0];
 
 			std::string subtask, benchmark, template_filename, output_filename;
+			bool json = false;
 			int64_t num_iterations = 0;
 			std::vector<std::string> params_vec;
 
@@ -91,6 +92,7 @@ namespace benchmarks
 				("verbosity,v", value<int64_t>(&_verbosity), "Verbosity in range [0..3], default: 1")
 				("count,c", value<int64_t>(&_repeatCount), "Measurements count, default: 1")
 				("benchmark,b", value<std::string>(&benchmark), "Benchmark id")
+				("json,j", bool_switch(&json), "Use json output format for single-benchmark mode")
 				("params", value<std::vector<std::string>>(&params_vec)->multitoken(), "Benchmark parameters")
 				("template,t", value<std::string>(&template_filename), "Template file")
 				("output,o", value<std::string>(&output_filename), "Output file")
@@ -167,10 +169,30 @@ namespace benchmarks
 					throw CmdLineException("Unknown subtask!");
 
 				auto r = RunBenchmark(benchmark_id);
-				for (auto p : r.GetOperationTimes())
-					s_logger.Info() << p.first << ": " << p.second << " ns";
-				for (auto p : r.GetMemoryConsumption())
-					s_logger.Info() << p.first << ": " << p.second << " bytes";
+
+				if (json)
+				{
+					const auto& times = r.GetOperationTimes();
+					const auto& memory = r.GetMemoryConsumption();
+
+					std::cout << "{" << std::endl;
+					std::cout << "  \"times\": {" << std::endl;
+					for (auto it = times.begin(); it != times.end(); ++it)
+						std::cout << "    \"" << it->first << "\": " << it->second << (std::next(it) == times.end() ? "" : ",") << std::endl;
+					std::cout << "  }," << std::endl;
+					std::cout << "  \"memory\": {" << std::endl;
+					for (auto it = memory.begin(); it != memory.end(); ++it)
+						std::cout << "    \"" << it->first << "\": " << it->second << (std::next(it) == memory.end() ? "" : ",") << std::endl;
+					std::cout << "  }" << std::endl;
+					std::cout << "}" << std::endl;
+				}
+				else
+				{
+					for (auto p : r.GetOperationTimes())
+						std::cout << p.first << ": " << p.second << " ns" << std::endl;
+					for (auto p : r.GetMemoryConsumption())
+						std::cout << p.first << ": " << p.second << " bytes" << std::endl;
+				}
 			}
 			else
 			{
