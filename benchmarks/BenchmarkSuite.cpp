@@ -168,7 +168,7 @@ namespace benchmarks
 			auto next_max_rss = max_rss * multiplier;
 
 			if (num_iterations * nanoseconds(1) > seconds(20))
-				throw std::runtime_error("Iteration time too small. Your benchmarks is probably wrong or optimized away.");
+				throw std::runtime_error("Iteration time too small. Your benchmark is probably invalid or optimized away.");
 
 			if (max_duration > seconds(10))
 			{
