@@ -19,86 +19,86 @@
 namespace benchmarks
 {
 
-	enum class LogLevel
-	{
-		Debug,
-		Verbose,
-		Info,
-		Warning,
-		Error
-	};
+    enum class LogLevel
+    {
+        Debug,
+        Verbose,
+        Info,
+        Warning,
+        Error
+    };
 
 
-	class NamedLogger;
+    class NamedLogger;
 
-	class Logger
-	{
-		friend class NamedLogger;
+    class Logger
+    {
+        friend class NamedLogger;
 
-	private:
-		static std::mutex       s_mutex;
-		static LogLevel			s_logLevel;
+    private:
+        static std::mutex       s_mutex;
+        static LogLevel         s_logLevel;
 
-	public:
-		static void SetLogLevel(LogLevel logLevel);
-		static LogLevel GetLogLevel();
+    public:
+        static void SetLogLevel(LogLevel logLevel);
+        static LogLevel GetLogLevel();
 
-	private:
-		static void Write(LogLevel logLevel, const std::string& loggerName, std::string str);
-	};
+    private:
+        static void Write(LogLevel logLevel, const std::string& loggerName, std::string str);
+    };
 
 
-	namespace detail
-	{
-		template < typename T_, typename Enabler_ = std::string >
-		struct ObjectLogger
-		{ static void Log(std::stringstream& s, T_&& val) { s << val; } };
+    namespace detail
+    {
+        template < typename T_, typename Enabler_ = std::string >
+        struct ObjectLogger
+        { static void Log(std::stringstream& s, T_&& val) { s << val; } };
 
-		template < typename T_ >
-		struct ObjectLogger<T_, decltype(std::declval<T_>().ToString())>
-		{ static void Log(std::stringstream& s, T_&& val) { s << val.ToString(); } };
-	}
+        template < typename T_ >
+        struct ObjectLogger<T_, decltype(std::declval<T_>().ToString())>
+        { static void Log(std::stringstream& s, T_&& val) { s << val.ToString(); } };
+    }
 
-	class NamedLogger
-	{
-	public:
-		class LoggerWriter
-		{
-		private:
-			LogLevel            _loggerLogLevel;
-			LogLevel            _logLevel;
-			const std::string*	_loggerName;
-			std::stringstream   _stream;
-			bool                _moved;
+    class NamedLogger
+    {
+    public:
+        class LoggerWriter
+        {
+        private:
+            LogLevel            _loggerLogLevel;
+            LogLevel            _logLevel;
+            const std::string*  _loggerName;
+            std::stringstream   _stream;
+            bool                _moved;
 
-		public:
-			LoggerWriter(LogLevel logLevel, const std::string& loggerName);
-			LoggerWriter(LoggerWriter&& other);
-			~LoggerWriter();
+        public:
+            LoggerWriter(LogLevel logLevel, const std::string& loggerName);
+            LoggerWriter(LoggerWriter&& other);
+            ~LoggerWriter();
 
-			template < typename T_ >
-			LoggerWriter& operator << (T_&& val)
-			{
-				if (_loggerLogLevel <= _logLevel)
-					detail::ObjectLogger<T_>::Log(_stream, std::forward<T_>(val));
-				return *this;
-			}
-		};
+            template < typename T_ >
+            LoggerWriter& operator << (T_&& val)
+            {
+                if (_loggerLogLevel <= _logLevel)
+                    detail::ObjectLogger<T_>::Log(_stream, std::forward<T_>(val));
+                return *this;
+            }
+        };
 
-	private:
-		std::string		_name;
+    private:
+        std::string     _name;
 
-	public:
-		NamedLogger(std::string name)
-			: _name(std::move(name))
-		{ }
+    public:
+        NamedLogger(std::string name)
+            : _name(std::move(name))
+        { }
 
-		LoggerWriter Debug() const { return LoggerWriter(LogLevel::Debug, _name); }
-		LoggerWriter Verbose() const { return LoggerWriter(LogLevel::Verbose, _name); }
-		LoggerWriter Info() const { return LoggerWriter(LogLevel::Info, _name); }
-		LoggerWriter Warning() const { return LoggerWriter(LogLevel::Warning, _name); }
-		LoggerWriter Error() const { return LoggerWriter(LogLevel::Error, _name); }
-	};
+        LoggerWriter Debug() const { return LoggerWriter(LogLevel::Debug, _name); }
+        LoggerWriter Verbose() const { return LoggerWriter(LogLevel::Verbose, _name); }
+        LoggerWriter Info() const { return LoggerWriter(LogLevel::Info, _name); }
+        LoggerWriter Warning() const { return LoggerWriter(LogLevel::Warning, _name); }
+        LoggerWriter Error() const { return LoggerWriter(LogLevel::Error, _name); }
+    };
 
 #define BENCHMARKS_LOGGER(ClassName_) benchmarks::NamedLogger ClassName_::s_logger(#ClassName_)
 

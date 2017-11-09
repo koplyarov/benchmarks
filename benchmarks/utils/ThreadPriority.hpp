@@ -17,7 +17,7 @@
 namespace benchmarks
 {
 
-	void SetMaxThreadPriority();
+    void SetMaxThreadPriority();
 
 }
 

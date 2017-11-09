@@ -17,13 +17,13 @@
 namespace benchmarks
 {
 
-	class Memory
-	{
-	public:
-		static int64_t GetRss();
-		static int64_t GetTotalPhys();
-		static int64_t GetAvailablePhys();
-	};
+    class Memory
+    {
+    public:
+        static int64_t GetRss();
+        static int64_t GetTotalPhys();
+        static int64_t GetAvailablePhys();
+    };
 
 }
 

@@ -14,86 +14,86 @@
 namespace benchmarks
 {
 
-	template < typename T_ >
-	union Storage
-	{
-	private:
-		T_		_obj;
+    template < typename T_ >
+    union Storage
+    {
+    private:
+        T_      _obj;
 
-	public:
-		Storage() { }
-		~Storage() { }
+    public:
+        Storage() { }
+        ~Storage() { }
 
-		template < typename... Args_ >
-		void Construct(Args_&&... args)
-		{ new(&_obj) T_(std::forward<Args_>(args)...); }
+        template < typename... Args_ >
+        void Construct(Args_&&... args)
+        { new(&_obj) T_(std::forward<Args_>(args)...); }
 
-		void Destruct()
-		{ _obj.~T_(); }
+        void Destruct()
+        { _obj.~T_(); }
 
-		T_* Ptr() { return &_obj; }
-		const T_* Ptr() const { return &_obj; }
-		T_& Ref() { return _obj; }
-		const T_& Ref() const { return _obj; }
+        T_* Ptr() { return &_obj; }
+        const T_* Ptr() const { return &_obj; }
+        T_& Ref() { return _obj; }
+        const T_& Ref() const { return _obj; }
 
-		T_& operator* () { return Ref(); }
-		const T_& operator* () const { return Ref(); }
+        T_& operator* () { return Ref(); }
+        const T_& operator* () const { return Ref(); }
 
-		T_* operator -> () { return Ptr(); }
-		const T_* operator -> () const { return Ptr(); }
-	};
-
-
-	template < typename T_ >
-	class StorageArray
-	{
-	private:
-		Storage<T_>*		_arr;
-		int64_t			_size;
-
-	public:
-		StorageArray(int64_t size)
-			: _size(size)
-		{ _arr = new Storage<T_>[size]; }
-
-		~StorageArray()
-		{ delete[] _arr; }
+        T_* operator -> () { return Ptr(); }
+        const T_* operator -> () const { return Ptr(); }
+    };
 
 
-		void Construct()
-		{
-			for (int64_t i = 0; i < _size; ++i)
-				_arr[i].Construct();
-		}
+    template < typename T_ >
+    class StorageArray
+    {
+    private:
+        Storage<T_>*        _arr;
+        int64_t         _size;
 
-		template < typename FunctorType_ >
-		void Construct(const FunctorType_& f)
-		{
-			for (int64_t i = 0; i < _size; ++i)
-				_arr[i].Construct(f());
-		}
+    public:
+        StorageArray(int64_t size)
+            : _size(size)
+        { _arr = new Storage<T_>[size]; }
 
-		void Destruct()
-		{
-			for (int64_t i = 0; i < _size; ++i)
-				_arr[i].Destruct();
-		}
+        ~StorageArray()
+        { delete[] _arr; }
 
 
-		template < typename FunctorType_ >
-		void ForEach(const FunctorType_& f)
-		{
-			for (int64_t i = 0; i < _size; ++i)
-				f(_arr[i].Ref());
-		}
+        void Construct()
+        {
+            for (int64_t i = 0; i < _size; ++i)
+                _arr[i].Construct();
+        }
+
+        template < typename FunctorType_ >
+        void Construct(const FunctorType_& f)
+        {
+            for (int64_t i = 0; i < _size; ++i)
+                _arr[i].Construct(f());
+        }
+
+        void Destruct()
+        {
+            for (int64_t i = 0; i < _size; ++i)
+                _arr[i].Destruct();
+        }
 
 
-		Storage<T_>& operator [] (int64_t i)
-		{ return _arr[i]; }
+        template < typename FunctorType_ >
+        void ForEach(const FunctorType_& f)
+        {
+            for (int64_t i = 0; i < _size; ++i)
+                f(_arr[i].Ref());
+        }
 
-		const Storage<T_>& operator [] (int64_t i) const
-		{ return _arr[i]; }
-	};
+
+        Storage<T_>& operator [] (int64_t i)
+        { return _arr[i]; }
+
+        const Storage<T_>& operator [] (int64_t i) const
+        { return _arr[i]; }
+    };
 
 }
 

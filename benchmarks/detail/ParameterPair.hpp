@@ -17,19 +17,19 @@
 namespace benchmarks
 {
 
-	class ParameterPair
-	{
-	private:
-		std::string		_name;
-		std::string		_value;
+    class ParameterPair
+    {
+    private:
+        std::string     _name;
+        std::string     _value;
 
-	public:
-		ParameterPair() { }
-		ParameterPair(std::string name, std::string value) : _name(std::move(name)), _value(std::move(value)) { }
+    public:
+        ParameterPair() { }
+        ParameterPair(std::string name, std::string value) : _name(std::move(name)), _value(std::move(value)) { }
 
-		std::string GetName() const { return _name; }
-		std::string GetValue() const { return _value; }
-	};
+        std::string GetName() const { return _name; }
+        std::string GetValue() const { return _value; }
+    };
 
 }
 

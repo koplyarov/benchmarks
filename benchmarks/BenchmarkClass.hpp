@@ -20,25 +20,25 @@
 namespace benchmarks
 {
 
-	class BenchmarksClass
-	{
-	private:
-		std::string						_name;
-		std::vector<IBenchmarkPtr>		_benchmarks;
+    class BenchmarksClass
+    {
+    private:
+        std::string                     _name;
+        std::vector<IBenchmarkPtr>      _benchmarks;
 
-	public:
-		BenchmarksClass(std::string name)
-			: _name(std::move(name))
-		{ }
+    public:
+        BenchmarksClass(std::string name)
+            : _name(std::move(name))
+        { }
 
-		std::string GetName() const { return _name; }
-		const std::vector<IBenchmarkPtr>& GetBenchmarks() const { return _benchmarks; }
+        std::string GetName() const { return _name; }
+        const std::vector<IBenchmarkPtr>& GetBenchmarks() const { return _benchmarks; }
 
-	protected:
-		template < typename... BenchmarkParams_, typename Functor_ >
-		void AddBenchmark(std::string name, Functor_ benchmarkFunc, std::vector<std::string> orderedParamNames = {})
-		{ _benchmarks.push_back(std::make_shared<Benchmark<BenchmarkParams_...>>(std::move(name), std::move(benchmarkFunc), std::move(orderedParamNames))); }
-	};
+    protected:
+        template < typename... BenchmarkParams_, typename Functor_ >
+        void AddBenchmark(std::string name, Functor_ benchmarkFunc, std::vector<std::string> orderedParamNames = {})
+        { _benchmarks.push_back(std::make_shared<Benchmark<BenchmarkParams_...>>(std::move(name), std::move(benchmarkFunc), std::move(orderedParamNames))); }
+    };
 
 
 }

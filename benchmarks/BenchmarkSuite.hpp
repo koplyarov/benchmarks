@@ -22,63 +22,63 @@
 namespace benchmarks
 {
 
-	namespace detail
-	{
-		using BenchmarksMap = std::map<BenchmarkId, IBenchmarkPtr>;
+    namespace detail
+    {
+        using BenchmarksMap = std::map<BenchmarkId, IBenchmarkPtr>;
 
 
-		template < template <typename> class BenchmarksClass_, typename... ObjectsDesc_ >
-		struct BenchmarksClassRegistrar
-		{
-			static void Register(BenchmarksMap& benchmarks)
-			{ }
-		};
+        template < template <typename> class BenchmarksClass_, typename... ObjectsDesc_ >
+        struct BenchmarksClassRegistrar
+        {
+            static void Register(BenchmarksMap& benchmarks)
+            { }
+        };
 
-		template < template <typename> class BenchmarksClass_, typename ObjectsDescHead_, typename... ObjectsDescTail_ >
-		struct BenchmarksClassRegistrar<BenchmarksClass_, ObjectsDescHead_, ObjectsDescTail_...>
-		{
-			static void Register(BenchmarksMap& benchmarks)
-			{
-				BenchmarksClass_<ObjectsDescHead_> bm;
-				for (auto b : bm.GetBenchmarks())
-					benchmarks.insert({BenchmarkId(bm.GetName(), b->GetName(), ObjectsDescHead_::GetName()), b});
+        template < template <typename> class BenchmarksClass_, typename ObjectsDescHead_, typename... ObjectsDescTail_ >
+        struct BenchmarksClassRegistrar<BenchmarksClass_, ObjectsDescHead_, ObjectsDescTail_...>
+        {
+            static void Register(BenchmarksMap& benchmarks)
+            {
+                BenchmarksClass_<ObjectsDescHead_> bm;
+                for (auto b : bm.GetBenchmarks())
+                    benchmarks.insert({BenchmarkId(bm.GetName(), b->GetName(), ObjectsDescHead_::GetName()), b});
 
-				BenchmarksClassRegistrar<BenchmarksClass_, ObjectsDescTail_...>::Register(benchmarks);
-			}
-		};
-	}
-
-
-	struct IBenchmarksResultsReporter
-	{
-		virtual ~IBenchmarksResultsReporter() { }
-
-		virtual void ReportOperationDuration(const std::string& name, double ns) = 0;
-		virtual void ReportMemoryConsumption(const std::string& name, int64_t bytes) = 0;
-	};
-	using IBenchmarksResultsReporterPtr = std::shared_ptr<IBenchmarksResultsReporter>;
+                BenchmarksClassRegistrar<BenchmarksClass_, ObjectsDescTail_...>::Register(benchmarks);
+            }
+        };
+    }
 
 
-	class BenchmarkSuite
-	{
-		using BenchmarksMap = std::map<BenchmarkId, IBenchmarkPtr>;
+    struct IBenchmarksResultsReporter
+    {
+        virtual ~IBenchmarksResultsReporter() { }
 
-	private:
-		class PreMeasureBenchmarkContext;
-		class MeasureBenchmarkContext;
+        virtual void ReportOperationDuration(const std::string& name, double ns) = 0;
+        virtual void ReportMemoryConsumption(const std::string& name, int64_t bytes) = 0;
+    };
+    using IBenchmarksResultsReporterPtr = std::shared_ptr<IBenchmarksResultsReporter>;
 
-	private:
-		static NamedLogger	s_logger;
-		BenchmarksMap		_benchmarks;
 
-	public:
-		template < template <typename> class BenchmarksClass_, typename... ObjectsDesc_ >
-		void RegisterBenchmarks()
-		{ detail::BenchmarksClassRegistrar<BenchmarksClass_, ObjectsDesc_...>::Register(_benchmarks); }
+    class BenchmarkSuite
+    {
+        using BenchmarksMap = std::map<BenchmarkId, IBenchmarkPtr>;
 
-		int64_t MeasureIterationsCount(const ParameterizedBenchmarkId& id);
-		void InvokeBenchmark(int64_t iterations, const ParameterizedBenchmarkId& id, const IBenchmarksResultsReporterPtr& resultsReporter);
-	};
+    private:
+        class PreMeasureBenchmarkContext;
+        class MeasureBenchmarkContext;
+
+    private:
+        static NamedLogger  s_logger;
+        BenchmarksMap       _benchmarks;
+
+    public:
+        template < template <typename> class BenchmarksClass_, typename... ObjectsDesc_ >
+        void RegisterBenchmarks()
+        { detail::BenchmarksClassRegistrar<BenchmarksClass_, ObjectsDesc_...>::Register(_benchmarks); }
+
+        int64_t MeasureIterationsCount(const ParameterizedBenchmarkId& id);
+        void InvokeBenchmark(int64_t iterations, const ParameterizedBenchmarkId& id, const IBenchmarksResultsReporterPtr& resultsReporter);
+    };
 }
 
 #endif

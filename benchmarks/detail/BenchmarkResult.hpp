@@ -20,32 +20,32 @@
 namespace benchmarks
 {
 
-	class BenchmarkResult
-	{
-	public:
-		using OperationTimesMap = std::map<std::string, double>;
-		using MemoryConsumptionMap = std::map<std::string, int64_t>;
+    class BenchmarkResult
+    {
+    public:
+        using OperationTimesMap = std::map<std::string, double>;
+        using MemoryConsumptionMap = std::map<std::string, int64_t>;
 
-	private:
-		OperationTimesMap		_operationTimes;
-		MemoryConsumptionMap	_memoryConsumption;
+    private:
+        OperationTimesMap       _operationTimes;
+        MemoryConsumptionMap    _memoryConsumption;
 
-	public:
-		BenchmarkResult() { }
+    public:
+        BenchmarkResult() { }
 
-		BenchmarkResult(OperationTimesMap operationTimes, MemoryConsumptionMap memoryConsumption)
-			: _operationTimes(std::move(operationTimes)), _memoryConsumption(std::move(memoryConsumption))
-		{ }
+        BenchmarkResult(OperationTimesMap operationTimes, MemoryConsumptionMap memoryConsumption)
+            : _operationTimes(std::move(operationTimes)), _memoryConsumption(std::move(memoryConsumption))
+        { }
 
-		const OperationTimesMap& GetOperationTimes() const { return _operationTimes; }
-		const MemoryConsumptionMap& GetMemoryConsumption() const { return _memoryConsumption; }
+        const OperationTimesMap& GetOperationTimes() const { return _operationTimes; }
+        const MemoryConsumptionMap& GetMemoryConsumption() const { return _memoryConsumption; }
 
-		void Update(const BenchmarkResult& other);
+        void Update(const BenchmarkResult& other);
 
-		template<class Archive>
-		void serialize(Archive &ar, const unsigned int version)
-		{ ar & BOOST_SERIALIZATION_NVP(_operationTimes) & BOOST_SERIALIZATION_NVP(_memoryConsumption); }
-	};
+        template<class Archive>
+        void serialize(Archive &ar, const unsigned int version)
+        { ar & BOOST_SERIALIZATION_NVP(_operationTimes) & BOOST_SERIALIZATION_NVP(_memoryConsumption); }
+    };
 
 }
 

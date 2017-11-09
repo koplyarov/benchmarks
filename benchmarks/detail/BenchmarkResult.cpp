@@ -15,26 +15,26 @@
 namespace benchmarks
 {
 
-	namespace
-	{
-		template < typename MapType_ >
-		void MergeMaps(MapType_& dst, const MapType_& src)
-		{
-			for (auto p : src)
-			{
-				auto it = dst.find(p.first);
-				if (it == dst.end())
-					dst.insert({p.first, p.second});
-				else
-					it->second = std::min(it->second, p.second);
-			}
-		}
-	}
+    namespace
+    {
+        template < typename MapType_ >
+        void MergeMaps(MapType_& dst, const MapType_& src)
+        {
+            for (auto p : src)
+            {
+                auto it = dst.find(p.first);
+                if (it == dst.end())
+                    dst.insert({p.first, p.second});
+                else
+                    it->second = std::min(it->second, p.second);
+            }
+        }
+    }
 
-	void BenchmarkResult::Update(const BenchmarkResult& other)
-	{
-		MergeMaps(_operationTimes, other._operationTimes);
-		MergeMaps(_memoryConsumption, other._memoryConsumption);
-	}
+    void BenchmarkResult::Update(const BenchmarkResult& other)
+    {
+        MergeMaps(_operationTimes, other._operationTimes);
+        MergeMaps(_memoryConsumption, other._memoryConsumption);
+    }
 
 }

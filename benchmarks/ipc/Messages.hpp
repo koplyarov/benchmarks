@@ -26,74 +26,74 @@
 namespace benchmarks
 {
 
-	class MessageBase
-	{
-	public:
-		virtual ~MessageBase() { }
+    class MessageBase
+    {
+    public:
+        virtual ~MessageBase() { }
 
-		template<class Archive>
-		void serialize(Archive &ar, const unsigned int version)
-		{ }
-	};
-
-
-	class IterationsCountMessage : public MessageBase
-	{
-	private:
-		int		_count;
-
-	public:
-		explicit IterationsCountMessage(int count = 0)
-			: _count(count)
-		{ }
-
-		int GetCount() const { return _count; }
-
-		template<class Archive>
-		void serialize(Archive &ar, const unsigned int version)
-		{ ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(benchmarks::MessageBase) & BOOST_SERIALIZATION_NVP(_count); }
-	};
+        template<class Archive>
+        void serialize(Archive &ar, const unsigned int version)
+        { }
+    };
 
 
-	class BenchmarkResultMessage : public MessageBase
-	{
-	private:
-		BenchmarkResult		_result;
-		uint64_t			_rss;
+    class IterationsCountMessage : public MessageBase
+    {
+    private:
+        int     _count;
 
-	public:
-		BenchmarkResultMessage()
-		{ }
+    public:
+        explicit IterationsCountMessage(int count = 0)
+            : _count(count)
+        { }
 
-		BenchmarkResultMessage(BenchmarkResult result, uint64_t rss)
-			: _result(std::move(result)), _rss(rss)
-		{ }
+        int GetCount() const { return _count; }
 
-		const BenchmarkResult& GetResult() const { return _result; }
-		uint64_t GetRss() const { return _rss; }
-
-		template<class Archive>
-		void serialize(Archive &ar, const unsigned int version)
-		{ ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(benchmarks::MessageBase) & BOOST_SERIALIZATION_NVP(_result) & BOOST_SERIALIZATION_NVP(_rss); }
-	};
+        template<class Archive>
+        void serialize(Archive &ar, const unsigned int version)
+        { ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(benchmarks::MessageBase) & BOOST_SERIALIZATION_NVP(_count); }
+    };
 
 
-	class ExceptionMessage : public MessageBase
-	{
-	private:
-		std::string		_message;
+    class BenchmarkResultMessage : public MessageBase
+    {
+    private:
+        BenchmarkResult     _result;
+        uint64_t            _rss;
 
-	public:
-		explicit ExceptionMessage(std::string message = "")
-			: _message(std::move(message))
-		{ }
+    public:
+        BenchmarkResultMessage()
+        { }
 
-		std::string GetMessage() const { return _message; }
+        BenchmarkResultMessage(BenchmarkResult result, uint64_t rss)
+            : _result(std::move(result)), _rss(rss)
+        { }
 
-		template<class Archive>
-		void serialize(Archive &ar, const unsigned int version)
-		{ ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(benchmarks::MessageBase) & BOOST_SERIALIZATION_NVP(_message); }
-	};
+        const BenchmarkResult& GetResult() const { return _result; }
+        uint64_t GetRss() const { return _rss; }
+
+        template<class Archive>
+        void serialize(Archive &ar, const unsigned int version)
+        { ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(benchmarks::MessageBase) & BOOST_SERIALIZATION_NVP(_result) & BOOST_SERIALIZATION_NVP(_rss); }
+    };
+
+
+    class ExceptionMessage : public MessageBase
+    {
+    private:
+        std::string     _message;
+
+    public:
+        explicit ExceptionMessage(std::string message = "")
+            : _message(std::move(message))
+        { }
+
+        std::string GetMessage() const { return _message; }
+
+        template<class Archive>
+        void serialize(Archive &ar, const unsigned int version)
+        { ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(benchmarks::MessageBase) & BOOST_SERIALIZATION_NVP(_message); }
+    };
 
 
 }

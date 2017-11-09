@@ -17,46 +17,46 @@
 namespace benchmarks
 {
 
-	struct IOperationProfiler
-	{
-		virtual ~IOperationProfiler() { }
-	};
-	using IOperationProfilerPtr = std::shared_ptr<IOperationProfiler>;
+    struct IOperationProfiler
+    {
+        virtual ~IOperationProfiler() { }
+    };
+    using IOperationProfilerPtr = std::shared_ptr<IOperationProfiler>;
 
 
-	class BenchmarkContext
-	{
-	private:
-		const int64_t		_iterationsCount;
+    class BenchmarkContext
+    {
+    private:
+        const int64_t       _iterationsCount;
 
-	public:
-		BenchmarkContext(int64_t iterationsCount) : _iterationsCount(iterationsCount) { }
-		virtual ~BenchmarkContext() { }
+    public:
+        BenchmarkContext(int64_t iterationsCount) : _iterationsCount(iterationsCount) { }
+        virtual ~BenchmarkContext() { }
 
-		BenchmarkContext(const BenchmarkContext&) = delete;
-		BenchmarkContext& operator = (const BenchmarkContext&) = delete;
+        BenchmarkContext(const BenchmarkContext&) = delete;
+        BenchmarkContext& operator = (const BenchmarkContext&) = delete;
 
-		int64_t GetIterationsCount() const
-		{ return _iterationsCount; }
+        int64_t GetIterationsCount() const
+        { return _iterationsCount; }
 
-		virtual void MeasureMemory(const std::string& name, int64_t count) = 0;
-		virtual IOperationProfilerPtr Profile(const std::string& name, int64_t count) = 0;
+        virtual void MeasureMemory(const std::string& name, int64_t count) = 0;
+        virtual IOperationProfilerPtr Profile(const std::string& name, int64_t count) = 0;
 
-		template < typename FunctorType_ >
-		void Profile(const std::string& name, int64_t count, const FunctorType_& func)
-		{
-			IOperationProfilerPtr op(Profile(name, count));
-			func();
-		}
+        template < typename FunctorType_ >
+        void Profile(const std::string& name, int64_t count, const FunctorType_& func)
+        {
+            IOperationProfilerPtr op(Profile(name, count));
+            func();
+        }
 
-		template < typename FunctorType_ >
-		void WarmUpAndProfile(const std::string& name, int64_t count, const FunctorType_& func)
-		{
-			func();
-			IOperationProfilerPtr op(Profile(name, count));
-			func();
-		}
-	};
+        template < typename FunctorType_ >
+        void WarmUpAndProfile(const std::string& name, int64_t count, const FunctorType_& func)
+        {
+            func();
+            IOperationProfilerPtr op(Profile(name, count));
+            func();
+        }
+    };
 
 }
 

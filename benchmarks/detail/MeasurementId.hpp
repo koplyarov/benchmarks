@@ -17,28 +17,28 @@
 namespace benchmarks
 {
 
-	class MeasurementId
-	{
-	private:
-		ParameterizedBenchmarkId	_benchmarkId;
-		std::string					_measurementLocalId;
+    class MeasurementId
+    {
+    private:
+        ParameterizedBenchmarkId    _benchmarkId;
+        std::string                 _measurementLocalId;
 
-	public:
-		MeasurementId() { }
+    public:
+        MeasurementId() { }
 
-		MeasurementId(ParameterizedBenchmarkId benchmarkId, std::string measurementLocalId)
-			: _benchmarkId(std::move(benchmarkId)), _measurementLocalId(std::move(measurementLocalId))
-		{ }
+        MeasurementId(ParameterizedBenchmarkId benchmarkId, std::string measurementLocalId)
+            : _benchmarkId(std::move(benchmarkId)), _measurementLocalId(std::move(measurementLocalId))
+        { }
 
-		ParameterizedBenchmarkId GetBenchmarkId() const { return _benchmarkId; }
-		std::string GetMeasurementLocalId() const { return _measurementLocalId; }
+        ParameterizedBenchmarkId GetBenchmarkId() const { return _benchmarkId; }
+        std::string GetMeasurementLocalId() const { return _measurementLocalId; }
 
-		std::string ToString() const
-		{ return _benchmarkId.ToString() + "[" + _measurementLocalId + "]"; }
+        std::string ToString() const
+        { return _benchmarkId.ToString() + "[" + _measurementLocalId + "]"; }
 
-		bool operator < (const MeasurementId& other) const
-		{ return std::tie(_benchmarkId, _measurementLocalId) < std::tie(other._benchmarkId, other._measurementLocalId); }
-	};
+        bool operator < (const MeasurementId& other) const
+        { return std::tie(_benchmarkId, _measurementLocalId) < std::tie(other._benchmarkId, other._measurementLocalId); }
+    };
 
 }
 

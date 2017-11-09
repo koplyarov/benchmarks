@@ -18,40 +18,40 @@
 namespace benchmarks
 {
 
-	class ParameterizedBenchmarkId
-	{
-	private:
-		BenchmarkId				_id;
-		SerializedParamsMap		_params;
+    class ParameterizedBenchmarkId
+    {
+    private:
+        BenchmarkId             _id;
+        SerializedParamsMap     _params;
 
-	public:
-		ParameterizedBenchmarkId()
-		{ }
+    public:
+        ParameterizedBenchmarkId()
+        { }
 
-		ParameterizedBenchmarkId(BenchmarkId id, SerializedParamsMap params)
-			: _id(std::move(id)), _params(std::move(params))
-		{ }
+        ParameterizedBenchmarkId(BenchmarkId id, SerializedParamsMap params)
+            : _id(std::move(id)), _params(std::move(params))
+        { }
 
-		BenchmarkId GetId() const { return _id; }
-		const SerializedParamsMap& GetParams() const { return _params; }
+        BenchmarkId GetId() const { return _id; }
+        const SerializedParamsMap& GetParams() const { return _params; }
 
-		std::string ToString() const
-		{
-			std::stringstream s;
-			s << _id.ToString();
-			if (!_params.empty())
-			{
-				s << "(";
-				for (auto it = _params.begin(); it != _params.end(); ++it)
-					s << (it == _params.begin() ? "" : ", ") << it->first << ":" << it->second;
-				s << ")";
-			}
-			return s.str();
-		}
+        std::string ToString() const
+        {
+            std::stringstream s;
+            s << _id.ToString();
+            if (!_params.empty())
+            {
+                s << "(";
+                for (auto it = _params.begin(); it != _params.end(); ++it)
+                    s << (it == _params.begin() ? "" : ", ") << it->first << ":" << it->second;
+                s << ")";
+            }
+            return s.str();
+        }
 
-		bool operator < (const ParameterizedBenchmarkId& other) const
-		{ return std::tie(_id, _params) < std::tie(other._id, other._params); }
-	};
+        bool operator < (const ParameterizedBenchmarkId& other) const
+        { return std::tie(_id, _params) < std::tie(other._id, other._params); }
+    };
 
 }
 

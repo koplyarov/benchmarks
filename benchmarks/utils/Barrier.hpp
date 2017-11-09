@@ -12,15 +12,15 @@
 
 
 #if defined(_MSC_VER)
-#	include <intrin.h>
+#   include <intrin.h>
 #endif
 
 #if defined(__GNUC__)
-#	define BENCHMARKS_BARRIER asm volatile ("":::"memory")
+#   define BENCHMARKS_BARRIER asm volatile ("":::"memory")
 #elif defined(_MSC_VER)
-#	define BENCHMARKS_BARRIER _ReadWriteBarrier()
+#   define BENCHMARKS_BARRIER _ReadWriteBarrier()
 #else
-#	define BENCHMARKS_BARRIER Barrier()
+#   define BENCHMARKS_BARRIER Barrier()
 namespace benchmarks { namespace detail { void Barrier(); }}
 #endif
 

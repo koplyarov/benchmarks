@@ -21,50 +21,50 @@
 namespace benchmarks
 {
 
-	struct RemoteException : public std::runtime_error
-	{ RemoteException(const std::string& msg) : std::runtime_error(msg) { } };
+    struct RemoteException : public std::runtime_error
+    { RemoteException(const std::string& msg) : std::runtime_error(msg) { } };
 
 
-	class MessageQueue
-	{
-	private:
-		static const int QueueSize = 4;
-		static const int MaxMessageSize = 4096 / QueueSize;
+    class MessageQueue
+    {
+    private:
+        static const int QueueSize = 4;
+        static const int MaxMessageSize = 4096 / QueueSize;
 
-		boost::interprocess::message_queue	_queue;
+        boost::interprocess::message_queue  _queue;
 
-	public:
-		MessageQueue(const std::string& name, boost::interprocess::create_only_t t)
-			: _queue(t, name.c_str(), QueueSize, MaxMessageSize)
-		{ }
+    public:
+        MessageQueue(const std::string& name, boost::interprocess::create_only_t t)
+            : _queue(t, name.c_str(), QueueSize, MaxMessageSize)
+        { }
 
-		MessageQueue(const std::string& name, boost::interprocess::open_only_t t)
-			: _queue(t, name.c_str())
-		{ }
+        MessageQueue(const std::string& name, boost::interprocess::open_only_t t)
+            : _queue(t, name.c_str())
+        { }
 
-		template < typename MessageType >
-		std::shared_ptr<MessageType> ReceiveMessage()
-		{
-			auto m = ReceiveMessageBase();
+        template < typename MessageType >
+        std::shared_ptr<MessageType> ReceiveMessage()
+        {
+            auto m = ReceiveMessageBase();
 
-			auto result = std::dynamic_pointer_cast<MessageType>(m);
-			if (result)
-				return result;
+            auto result = std::dynamic_pointer_cast<MessageType>(m);
+            if (result)
+                return result;
 
-			auto ex = dynamic_cast<ExceptionMessage*>(m.get());
-			if (ex)
-				throw RemoteException(ex->GetMessage());
+            auto ex = dynamic_cast<ExceptionMessage*>(m.get());
+            if (ex)
+                throw RemoteException(ex->GetMessage());
 
-			throw std::runtime_error("Unexpected message type!");
-		}
+            throw std::runtime_error("Unexpected message type!");
+        }
 
-		void SendMessage(const std::shared_ptr<MessageBase>& message);
+        void SendMessage(const std::shared_ptr<MessageBase>& message);
 
-		static void Remove(const std::string& name);
+        static void Remove(const std::string& name);
 
-	private:
-		std::shared_ptr<MessageBase> ReceiveMessageBase();
-	};
+    private:
+        std::shared_ptr<MessageBase> ReceiveMessageBase();
+    };
 
 }
 

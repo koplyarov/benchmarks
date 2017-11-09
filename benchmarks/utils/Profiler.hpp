@@ -17,27 +17,27 @@
 namespace benchmarks
 {
 
-	template < typename ClockT_ >
-	class BasicProfiler
-	{
-		using TimePoint = std::chrono::time_point<ClockT_>;
+    template < typename ClockT_ >
+    class BasicProfiler
+    {
+        using TimePoint = std::chrono::time_point<ClockT_>;
 
-	private:
-		TimePoint		_start;
+    private:
+        TimePoint       _start;
 
-	public:
-		BasicProfiler() { _start = ClockT_::now(); }
+    public:
+        BasicProfiler() { _start = ClockT_::now(); }
 
-		auto Reset() -> decltype(TimePoint() - TimePoint())
-		{
-			TimePoint end = ClockT_::now();
-			auto delta = end - _start;
-			_start = end;
-			return delta;
-		}
-	};
+        auto Reset() -> decltype(TimePoint() - TimePoint())
+        {
+            TimePoint end = ClockT_::now();
+            auto delta = end - _start;
+            _start = end;
+            return delta;
+        }
+    };
 
-	using Profiler = BasicProfiler<std::chrono::high_resolution_clock>;
+    using Profiler = BasicProfiler<std::chrono::high_resolution_clock>;
 
 }
 

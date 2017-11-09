@@ -18,31 +18,31 @@
 namespace benchmarks
 {
 
-	class BenchmarkId
-	{
-	private:
-		std::string		_className;
-		std::string		_benchmarkName;
-		std::string		_objectName;
+    class BenchmarkId
+    {
+    private:
+        std::string     _className;
+        std::string     _benchmarkName;
+        std::string     _objectName;
 
-	public:
-		BenchmarkId()
-		{ }
+    public:
+        BenchmarkId()
+        { }
 
-		BenchmarkId(std::string className, std::string benchmarkName, std::string objectName)
-			: _className(std::move(className)), _benchmarkName(std::move(benchmarkName)), _objectName(std::move(objectName))
-		{ }
+        BenchmarkId(std::string className, std::string benchmarkName, std::string objectName)
+            : _className(std::move(className)), _benchmarkName(std::move(benchmarkName)), _objectName(std::move(objectName))
+        { }
 
-		std::string GetClassName() const		{ return _className; }
-		std::string GetBenchmarkName() const	{ return _benchmarkName; }
-		std::string GetObjectName() const		{ return _objectName; }
+        std::string GetClassName() const        { return _className; }
+        std::string GetBenchmarkName() const    { return _benchmarkName; }
+        std::string GetObjectName() const       { return _objectName; }
 
-		bool operator < (const BenchmarkId& other) const
-		{ return std::tie(_className, _benchmarkName, _objectName) < std::tie(other._className, other._benchmarkName, other._objectName); }
+        bool operator < (const BenchmarkId& other) const
+        { return std::tie(_className, _benchmarkName, _objectName) < std::tie(other._className, other._benchmarkName, other._objectName); }
 
-		std::string ToString() const
-		{ return _className + "." + _benchmarkName + "." + _objectName; }
-	};
+        std::string ToString() const
+        { return _className + "." + _benchmarkName + "." + _objectName; }
+    };
 
 }
 

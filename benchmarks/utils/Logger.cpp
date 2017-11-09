@@ -13,57 +13,57 @@
 namespace benchmarks
 {
 
-	NamedLogger::LoggerWriter::LoggerWriter(LogLevel logLevel, const std::string& loggerName)
-		: _loggerLogLevel(Logger::GetLogLevel()), _logLevel(logLevel), _loggerName(&loggerName), _moved(false)
-	{ }
+    NamedLogger::LoggerWriter::LoggerWriter(LogLevel logLevel, const std::string& loggerName)
+        : _loggerLogLevel(Logger::GetLogLevel()), _logLevel(logLevel), _loggerName(&loggerName), _moved(false)
+    { }
 
-	NamedLogger::LoggerWriter::LoggerWriter(LoggerWriter&& other)
-		: _loggerLogLevel(other._loggerLogLevel), _logLevel(other._logLevel), _moved(false)
-	{
-		_stream << other._stream.str();
-		other._moved = true;
-	}
+    NamedLogger::LoggerWriter::LoggerWriter(LoggerWriter&& other)
+        : _loggerLogLevel(other._loggerLogLevel), _logLevel(other._logLevel), _moved(false)
+    {
+        _stream << other._stream.str();
+        other._moved = true;
+    }
 
-	NamedLogger::LoggerWriter::~LoggerWriter()
-	{
-		if (!_moved && _loggerLogLevel <= _logLevel)
-			Logger::Write(_logLevel, *_loggerName, _stream.str());
-	}
-
-
-	////////////////////////////////////////////////////////////////////////////////
+    NamedLogger::LoggerWriter::~LoggerWriter()
+    {
+        if (!_moved && _loggerLogLevel <= _logLevel)
+            Logger::Write(_logLevel, *_loggerName, _stream.str());
+    }
 
 
-	std::mutex Logger::s_mutex;
-	LogLevel Logger::s_logLevel = LogLevel::Info;
+    ////////////////////////////////////////////////////////////////////////////////
 
 
-	void Logger::SetLogLevel(LogLevel logLevel)
-	{
-		std::lock_guard<std::mutex> l(s_mutex);
-		s_logLevel = logLevel;
-	}
-
-	LogLevel Logger::GetLogLevel()
-	{
-		std::lock_guard<std::mutex> l(s_mutex);
-		return s_logLevel;
-	}
+    std::mutex Logger::s_mutex;
+    LogLevel Logger::s_logLevel = LogLevel::Info;
 
 
-	void Logger::Write(LogLevel logLevel, const std::string& loggerName, std::string str)
-	{
-		std::lock_guard<std::mutex> l(s_mutex);
-		switch (logLevel)
-		{
-		case LogLevel::Debug:	std::cerr << "[Debug]   "; break;
-		case LogLevel::Verbose:	std::cerr << "[Verbose] "; break;
-		case LogLevel::Info:	std::cerr << "[Info]    "; break;
-		case LogLevel::Warning:	std::cerr << "[Warning] "; break;
-		case LogLevel::Error:	std::cerr << "[Error]   "; break;
-		default: std::cerr << "[LogLevel: " << static_cast<std::underlying_type<LogLevel>::type>(logLevel) << "] "; break;
-		}
-		std::cerr << "[" << loggerName << "] " << std::string(std::max(0, 16 - (int)loggerName.size()), ' ') << str << std::endl;
-	}
+    void Logger::SetLogLevel(LogLevel logLevel)
+    {
+        std::lock_guard<std::mutex> l(s_mutex);
+        s_logLevel = logLevel;
+    }
+
+    LogLevel Logger::GetLogLevel()
+    {
+        std::lock_guard<std::mutex> l(s_mutex);
+        return s_logLevel;
+    }
+
+
+    void Logger::Write(LogLevel logLevel, const std::string& loggerName, std::string str)
+    {
+        std::lock_guard<std::mutex> l(s_mutex);
+        switch (logLevel)
+        {
+        case LogLevel::Debug:   std::cerr << "[Debug]   "; break;
+        case LogLevel::Verbose: std::cerr << "[Verbose] "; break;
+        case LogLevel::Info:    std::cerr << "[Info]    "; break;
+        case LogLevel::Warning: std::cerr << "[Warning] "; break;
+        case LogLevel::Error:   std::cerr << "[Error]   "; break;
+        default: std::cerr << "[LogLevel: " << static_cast<std::underlying_type<LogLevel>::type>(logLevel) << "] "; break;
+        }
+        std::cerr << "[" << loggerName << "] " << std::string(std::max(0, 16 - (int)loggerName.size()), ' ') << str << std::endl;
+    }
 
 }

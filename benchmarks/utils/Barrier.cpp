@@ -16,7 +16,7 @@ namespace detail
 {
 
 #if !defined(__GNUC__) && !defined(_MSC_VER)
-	void Barrier() { }
+    void Barrier() { }
 #endif
 
 }}

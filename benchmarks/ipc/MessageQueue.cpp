@@ -24,41 +24,41 @@ BOOST_CLASS_EXPORT_IMPLEMENT(benchmarks::ExceptionMessage);
 namespace benchmarks
 {
 
-	using namespace boost::interprocess;
+    using namespace boost::interprocess;
 
 
-	std::shared_ptr<MessageBase> MessageQueue::ReceiveMessageBase()
-	{
-		std::array<char, MaxMessageSize> buf;
+    std::shared_ptr<MessageBase> MessageQueue::ReceiveMessageBase()
+    {
+        std::array<char, MaxMessageSize> buf;
 
-		message_queue::size_type msg_size = 0;
-		unsigned int priority = 0;
-		_queue.receive(buf.data(), buf.size(), msg_size, priority);
+        message_queue::size_type msg_size = 0;
+        unsigned int priority = 0;
+        _queue.receive(buf.data(), buf.size(), msg_size, priority);
 
-		std::stringstream s(std::string(buf.begin(), buf.begin() + msg_size));
-		boost::archive::text_iarchive ar(s);
+        std::stringstream s(std::string(buf.begin(), buf.begin() + msg_size));
+        boost::archive::text_iarchive ar(s);
 
-		MessageBase* result = nullptr;
-		ar >> result;
+        MessageBase* result = nullptr;
+        ar >> result;
 
-		return std::shared_ptr<MessageBase>(result);
-	}
-
-
-	void MessageQueue::SendMessage(const std::shared_ptr<MessageBase>& message)
-	{
-		std::stringstream s;
-		boost::archive::text_oarchive ar(s);
-		MessageBase* message_ptr = message.get();
-		ar << BOOST_SERIALIZATION_NVP(message_ptr);
-
-		std::string str(s.str());
-
-		_queue.send(str.data(), str.size(), 0);
-	}
+        return std::shared_ptr<MessageBase>(result);
+    }
 
 
-	void MessageQueue::Remove(const std::string& name)
-	{ message_queue::remove(name.c_str()); }
+    void MessageQueue::SendMessage(const std::shared_ptr<MessageBase>& message)
+    {
+        std::stringstream s;
+        boost::archive::text_oarchive ar(s);
+        MessageBase* message_ptr = message.get();
+        ar << BOOST_SERIALIZATION_NVP(message_ptr);
+
+        std::string str(s.str());
+
+        _queue.send(str.data(), str.size(), 0);
+    }
+
+
+    void MessageQueue::Remove(const std::string& name)
+    { message_queue::remove(name.c_str()); }
 
 }
