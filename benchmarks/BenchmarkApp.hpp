@@ -19,25 +19,7 @@
 namespace benchmarks
 {
 
-    class BenchmarkApp
-    {
-    private:
-        static NamedLogger  s_logger;
-        BenchmarkSuite      _suite;
-        std::string         _executableName;
-        std::string         _queueName;
-        int64_t             _verbosity;
-        int64_t             _repeatCount;
-
-    public:
-        BenchmarkApp(const BenchmarkSuite& suite);
-
-        int Run(int argc, char* argv[]);
-
-    private:
-        BenchmarkResult RunBenchmark(const ParameterizedBenchmarkId& id) const;
-        static void InvokeSubprocess(const std::string& cmd);
-    };
+    int RunBenchmarkApp(const BenchmarkSuite& suite, int argc, const char* argv[]);
 
 }
 

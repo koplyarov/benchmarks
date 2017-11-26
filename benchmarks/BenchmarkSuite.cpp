@@ -139,7 +139,7 @@ namespace benchmarks
 
     BENCHMARKS_LOGGER(BenchmarkSuite);
 
-    int64_t BenchmarkSuite::MeasureIterationsCount(const ParameterizedBenchmarkId& id)
+    int64_t BenchmarkSuite::MeasureIterationsCount(const ParameterizedBenchmarkId& id) const
     {
         const int multiplier = 2;
 
@@ -204,7 +204,7 @@ namespace benchmarks
     }
 
 
-    void BenchmarkSuite::InvokeBenchmark(int64_t iterations, const ParameterizedBenchmarkId& id, const IBenchmarksResultsReporterPtr& resultsReporter)
+    void BenchmarkSuite::InvokeBenchmark(int64_t iterations, const ParameterizedBenchmarkId& id, const IBenchmarksResultsReporterPtr& resultsReporter) const
     {
         s_logger.Debug() << "iterations: " << iterations;
 

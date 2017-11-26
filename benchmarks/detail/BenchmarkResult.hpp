@@ -11,8 +11,6 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-#include <boost/serialization/nvp.hpp>
-
 #include <map>
 #include <string>
 
@@ -41,10 +39,6 @@ namespace benchmarks
         const MemoryConsumptionMap& GetMemoryConsumption() const { return _memoryConsumption; }
 
         void Update(const BenchmarkResult& other);
-
-        template<class Archive>
-        void serialize(Archive &ar, const unsigned int version)
-        { ar & BOOST_SERIALIZATION_NVP(_operationTimes) & BOOST_SERIALIZATION_NVP(_memoryConsumption); }
     };
 
 }
