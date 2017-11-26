@@ -19,12 +19,6 @@ def eprint(msg):
     sys.stderr.write("{}\n".format(msg))
 
 
-def run(executable, id, lang):
-    out_json = subprocess.check_output([executable, '-j', '-c1', '-b', id, '--params', 'lang:{}'.format(lang)])
-    out = json.loads(out_json)
-    return out['times']['main']
-
-
 class Context:
     def __init__(self):
         self.num_errors = 0
