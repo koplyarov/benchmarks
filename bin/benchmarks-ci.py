@@ -47,9 +47,9 @@ def main():
     parser.add_argument('--num-passes', help='number of joint-benchmarks passes required to measure performance', type=int, default=1)
     args = parser.parse_args()
 
-    env = copy.copy(os.environ)
+    env = copy.deepcopy(os.environ)
     env.update(json.loads(args.env_update))
-    reference_env = copy.copy(os.environ)
+    reference_env = copy.deepcopy(os.environ)
     reference_env.update(json.loads(args.reference_env_update))
 
     ctx = Context()
@@ -72,8 +72,8 @@ def main():
                 reference_list = []
 
                 cmd_args = ['--subtask', 'measureIterationsCount', id, 'lang:{}'.format(lang)]
-                current_iterations_count = json.loads(subprocess.check_output([args.executable] + cmd_args))['iterations_count']
-                reference_iterations_count = json.loads(subprocess.check_output([args.reference_executable] + cmd_args))['iterations_count']
+                current_iterations_count = json.loads(subprocess.check_output([args.executable] + cmd_args, env=env))['iterations_count']
+                reference_iterations_count = json.loads(subprocess.check_output([args.reference_executable] + cmd_args, env=reference_env))['iterations_count']
 
                 for i in range(args.num_passes):
                     cmd = [args.executable, '--subtask', 'invokeBenchmark', '--iterations', str(current_iterations_count), id, 'lang:{}'.format(lang)]
