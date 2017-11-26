@@ -41,9 +41,16 @@ def main():
     parser = argparse.ArgumentParser(description='Joint adapters generator')
     parser.add_argument('--executable', help='joint-benchmarks executable', required=True)
     parser.add_argument('--reference-executable', help='joint-benchmarks reference executable', required=True)
+    parser.add_argument('--env-update', default='{}', help='joint-benchmarks executable environment variables update')
+    parser.add_argument('--reference-env-update', default='{}', help='joint-benchmarks reference executable environment variables update')
     parser.add_argument('--benchmarks', help='benchmarks.json file', required=True)
     parser.add_argument('--num-passes', help='number of joint-benchmarks passes required to measure performance', type=int, default=1)
     args = parser.parse_args()
+
+    env = copy.copy(os.environ)
+    env.update(json.loads(args.env_update))
+    reference_env = copy.copy(os.environ)
+    reference_env.update(json.loads(args.reference_env_update))
 
     ctx = Context()
 
@@ -70,9 +77,9 @@ def main():
 
                 for i in range(args.num_passes):
                     cmd = [args.executable, '--subtask', 'invokeBenchmark', '--iterations', str(current_iterations_count), id, 'lang:{}'.format(lang)]
-                    current_list.append(json.loads(subprocess.check_output(cmd))['times']['main'])
+                    current_list.append(json.loads(subprocess.check_output(cmd, env=env))['times']['main'])
                     cmd = [args.reference_executable, '--subtask', 'invokeBenchmark', '--iterations', str(current_iterations_count), id, 'lang:{}'.format(lang)]
-                    reference_list.append(json.loads(subprocess.check_output(cmd))['times']['main'])
+                    reference_list.append(json.loads(subprocess.check_output(cmd, env=reference_env))['times']['main'])
 
                 _, current, reference = min(((abs(c - r), c, r) for c, r in zip(sorted(current_list), sorted(reference_list))), key=lambda (d, c, r): d)
                 result[lang][id] = ResultEntry(reference=reference, current=current, error=None)
