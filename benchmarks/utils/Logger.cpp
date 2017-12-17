@@ -9,6 +9,8 @@
 
 #include <benchmarks/utils/Logger.hpp>
 
+#include <algorithm>
+
 
 namespace benchmarks
 {
