@@ -14,6 +14,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(benchmarks
     benchmarks/BenchmarkApp.cpp
+    benchmarks/BenchmarkContext.cpp
     benchmarks/BenchmarkSuite.cpp
     benchmarks/detail/BenchmarkResult.cpp
     benchmarks/utils/Barrier.cpp

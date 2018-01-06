@@ -52,11 +52,13 @@ namespace benchmarks
         template < typename FunctorType_ >
         void WarmUpAndProfile(const std::string& name, int64_t count, const FunctorType_& func, size_t numWarmUpPasses = 1)
         {
-            for (size_t i = 0; i < numWarmUpPasses; ++i)
-                func();
+            DoWarmUp(func, numWarmUpPasses);
             IOperationProfilerPtr op(Profile(name, count));
             func();
         }
+
+    private:
+        void DoWarmUp(const std::function<void()>& func, size_t numWarmUpPasses) const;
     };
 
 }
