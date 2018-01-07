@@ -100,10 +100,14 @@ namespace benchmarks
         std::string                 _name;
         BenchmarkFunction           _benchmarkFunc;
         std::vector<std::string>    _orderedParamNames;
+        SerializedParamsMap         _defaultParams;
 
     public:
-        Benchmark(std::string name, BenchmarkFunction benchmarkFunc, std::vector<std::string> orderedParamNames)
-            : _name(std::move(name)), _benchmarkFunc(std::move(benchmarkFunc)), _orderedParamNames(std::move(orderedParamNames))
+        Benchmark(std::string name, BenchmarkFunction benchmarkFunc, std::vector<std::string> orderedParamNames, SerializedParamsMap defaultParams)
+            : _name(std::move(name)),
+              _benchmarkFunc(std::move(benchmarkFunc)),
+              _orderedParamNames(std::move(orderedParamNames)),
+              _defaultParams(std::move(defaultParams))
         {
             if (_orderedParamNames.size() != sizeof...(BenchmarkParams_))
                 throw std::runtime_error(_name + ": parameters count mismatch: expected " + std::to_string(sizeof...(BenchmarkParams_)) + ", got " + std::to_string(_orderedParamNames.size()));
@@ -114,10 +118,13 @@ namespace benchmarks
 
         void Perform(BenchmarkContext& context, const SerializedParamsMap& serializedParams) const
         {
-            if (serializedParams.size() != _orderedParamNames.size())
+            SerializedParamsMap serializedParamsWithDefaults(_defaultParams);
+            serializedParamsWithDefaults.insert(serializedParams.begin(), serializedParams.end());
+
+            if (serializedParamsWithDefaults.size() != _orderedParamNames.size())
                 throw std::runtime_error(_name + ": parameters count mismatch!");
 
-            detail::BenchmarkInvoker<BenchmarkParams_...>::Invoke(_name, _orderedParamNames.cbegin(), _orderedParamNames.cend(), serializedParams, _benchmarkFunc, context);
+            detail::BenchmarkInvoker<BenchmarkParams_...>::Invoke(_name, _orderedParamNames.cbegin(), _orderedParamNames.cend(), serializedParamsWithDefaults, _benchmarkFunc, context);
         }
     };
 
