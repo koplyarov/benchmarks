@@ -118,8 +118,8 @@ namespace benchmarks
 
         void Perform(BenchmarkContext& context, const SerializedParamsMap& serializedParams) const
         {
-            SerializedParamsMap serializedParamsWithDefaults(_defaultParams);
-            serializedParamsWithDefaults.insert(serializedParams.begin(), serializedParams.end());
+            SerializedParamsMap serializedParamsWithDefaults(serializedParams);
+            serializedParamsWithDefaults.insert(_defaultParams.begin(), _defaultParams.end());
 
             if (serializedParamsWithDefaults.size() != _orderedParamNames.size())
                 throw std::runtime_error(_name + ": parameters count mismatch!");
