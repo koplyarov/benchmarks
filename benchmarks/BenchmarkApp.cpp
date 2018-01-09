@@ -10,10 +10,9 @@
 
 
 
-
-
 #include <benchmarks/BenchmarkApp.hpp>
 
+#include <benchmarks/detail/Config.hpp>
 #include <benchmarks/utils/Memory.hpp>
 #include <benchmarks/utils/ThreadPriority.hpp>
 
@@ -90,6 +89,9 @@ namespace benchmarks
 
         try
         {
+#if BENCHMARKS_CFG_DEBUG
+            throw CmdLineException("You are trying to run the debug build of benchmarks. This is a bad idea. :)");
+#endif
             std::string subtask, benchmark;
             int64_t num_iterations = -1;
             int64_t verbosity = 1;
@@ -122,9 +124,9 @@ namespace benchmarks
             }
 
             if (subtask.empty())
-                throw std::runtime_error("subtask not specified");
+                throw CmdLineException("subtask not specified");
             if (benchmark.empty())
-                throw std::runtime_error("benchmark not specified");
+                throw CmdLineException("benchmark not specified");
 
             switch (verbosity)
             {
