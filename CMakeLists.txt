@@ -39,7 +39,9 @@ if (Boost_FOUND)
 		benchmarks/utils/ThreadPriority.cpp
 	)
 
-	find_library(PSAPI Psapi)
+	if (WIN32)
+		find_library(PSAPI Psapi)
+	endif()
 
 	target_link_libraries(benchmarks ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${PSAPI})
 else()
