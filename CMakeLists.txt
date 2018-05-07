@@ -39,7 +39,9 @@ if (Boost_FOUND)
 		benchmarks/utils/ThreadPriority.cpp
 	)
 
-	target_link_libraries(benchmarks ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+	find_library(PSAPI Psapi)
+
+	target_link_libraries(benchmarks ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${PSAPI})
 else()
 	set(BENCHMARKS_DEPENDENCIES_RESOLVED FALSE PARENT_SCOPE)
 endif()
